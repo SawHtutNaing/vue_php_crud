@@ -93,50 +93,7 @@ export default {
   },
 
 
-async editBook(book) {
-  // Set the form data with the book details
-  this.formData = { ...book };
-  
-  
 
-  // Show the modal
-  this.modalTitle = 'Edit Book';
-  this.showModal = true;
-
-  // Wait for the user to save or cancel the modal
-  
-
-  
-  
- 
-
-  // Clear the form data and callback
-  this.formData = {};
-  this.saveCallback = null;
-} , 
-
-deleteBook(book) {
-  
-  if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
-    fetch(`http://localhost:2223/api.php/books/${book.id}`, {
-  method: 'DELETE',
-})
-
-    .then(response => {
-      if (response.ok) {
-        this.loadBooks();
-      } else {
-        throw new Error('Failed to delete book');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      alert('An error occurred while deleting the book.');
-    });
-  } 
-}
-
-, 
 
 saveBook() { if (this.formData.title && this.formData.author) { let method = 'POST'; let url = 'http://localhost:2223/api.php/books'; if (this.formData.id) { method = 'PUT'; url += `/${this.formData.id}`;
 }

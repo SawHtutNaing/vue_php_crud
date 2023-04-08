@@ -1,3 +1,4 @@
+
 <template>
   <div class="container mt-3">
     <h1>{{ title }}</h1>
@@ -54,9 +55,12 @@
   </div>
 </template>
 
+
+
 <script>
+
 export default {
-  name: 'App',
+  name: 'My',
   data() {
     return {
       title: 'My Books',
@@ -64,7 +68,7 @@ export default {
       showModal: false,
       modalTitle: '',
       formData: {
-        id: 0,
+        id: '',
         title: '',
         author: '',
       },
@@ -83,42 +87,20 @@ export default {
         .then((data) => (this.books = data));
     },
 
-    addBook() {
-      this.modalTitle = 'Add Book';
-      this.formData.id = 0;
-      this.formData.title = '';
-      this.formData.author = '';
-      this.showModal = true;
-
-  },
+     editBook(book){
+      this.showModal = true ; 
+      this.modalTitle = "Edit the book" ;
+      this.formData = {...book};
 
 
-async editBook(book) {
-  // Set the form data with the book details
-  this.formData = { ...book };
-  
-  
-
-  // Show the modal
-  this.modalTitle = 'Edit Book';
-  this.showModal = true;
-
-  // Wait for the user to save or cancel the modal
-  
-
-  
-  
- 
-
-  // Clear the form data and callback
-  this.formData = {};
-  this.saveCallback = null;
 } , 
 
+    
 deleteBook(book) {
   
   if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
-    fetch(`http://localhost:2223/api.php/books/${book.id}`, {
+    
+    fetch(`http://localhost:2223/api.php/books?id=${book.id}`, {
   method: 'DELETE',
 })
 
@@ -135,10 +117,19 @@ deleteBook(book) {
     });
   } 
 }
+,
 
-, 
 
-saveBook() { if (this.formData.title && this.formData.author) { let method = 'POST'; let url = 'http://localhost:2223/api.php/books'; if (this.formData.id) { method = 'PUT'; url += `/${this.formData.id}`;
+
+
+saveBook() { if (
+  this.formData.title && this.formData.author
+  ) { let method = 'POST'; 
+let url = 'http://localhost:2223/api.php/books';
+ if (this.formData.id) {
+  
+   method = 'PUT'; url += `/${this.formData.id}`;
+   
 }
 
 fetch(url, {
@@ -156,10 +147,14 @@ this.loadBooks();
 },
 
 
+addBook() {
+      this.modalTitle = 'Add Book';
+      this.formData.id = 0;
+      this.formData.title = '';
+      this.formData.author = '';
+      this.showModal = true;
 
-
-
-
+  },
 closeModal() {
 this.showModal = false;
 this.formData.id = 0;
@@ -168,10 +163,6 @@ this.formData.author = '';
 },
 },
 };
-</script>
 
-<style>
-.modal {
-  background: rgba(0, 0, 0, 0.5);
-}
-</style>
+
+</script>

@@ -68,79 +68,36 @@ export default {
         title: '',
         author: '',
       },
-      saveCallback: null, // declare saveCallback variable
-    saveCallbackResult: false, // declare saveCallbackResult variable
     };
   },
   mounted() {
     this.loadBooks();
   },
-
   methods: {
     loadBooks() {
-      fetch('http://localhost:2223/api.php/books')
+      fetch('/api.php/books')
         .then((response) => response.json())
         .then((data) => (this.books = data));
     },
-
     addBook() {
       this.modalTitle = 'Add Book';
       this.formData.id = 0;
       this.formData.title = '';
       this.formData.author = '';
       this.showModal = true;
-
-  },
-
-
-async editBook(book) {
-  // Set the form data with the book details
-  this.formData = { ...book };
-  
-  
-
-  // Show the modal
-  this.modalTitle = 'Edit Book';
-  this.showModal = true;
-
-  // Wait for the user to save or cancel the modal
-  
-
-  
-  
- 
-
-  // Clear the form data and callback
-  this.formData = {};
-  this.saveCallback = null;
-} , 
-
-deleteBook(book) {
-  
-  if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
-    fetch(`http://localhost:2223/api.php/books/${book.id}`, {
-  method: 'DELETE',
-})
-
-    .then(response => {
-      if (response.ok) {
-        this.loadBooks();
-      } else {
-        throw new Error('Failed to delete book');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      alert('An error occurred while deleting the book.');
-    });
-  } 
+    },
+    editBook(book) {
+      this.modalTitle = 'Edit Book';
+      this.formData.id = book.id;
+      this.formData.title = book.title;
+      this.formData.author = book.author;
+      this.showModal = true;
+    },
+    deleteBook(book) {
+      if (confirm(`Are you sure you want to delete "${book.title}"?`)) {
+        fetch(`/api.php/books
+        delete/${book.id}`, { method: 'DELETE' }) .then(() => this.loadBooks()); } }, saveBook() { if (this.formData.title && this.formData.author) { let method = 'POST'; let url = '/api.php/books'; if (this.formData.id) { method = 'PUT'; url += `/${this.formData.id}`;
 }
-
-, 
-
-saveBook() { if (this.formData.title && this.formData.author) { let method = 'POST'; let url = 'http://localhost:2223/api.php/books'; if (this.formData.id) { method = 'PUT'; url += `/${this.formData.id}`;
-}
-
 fetch(url, {
 method: method,
 headers: {
@@ -154,12 +111,6 @@ this.loadBooks();
 });
 }
 },
-
-
-
-
-
-
 closeModal() {
 this.showModal = false;
 this.formData.id = 0;
